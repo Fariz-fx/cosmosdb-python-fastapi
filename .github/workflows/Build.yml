@@ -48,5 +48,5 @@ jobs:
         #pytest
     - name: Run the application
       run: |
-        cd uvicorn cosmosdb-with-fastapi
+        cd cosmosdb-with-fastapi
         uvicorn cosmosdb-with-fastapi.main:app --reload
