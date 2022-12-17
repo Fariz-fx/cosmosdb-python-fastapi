@@ -9,12 +9,12 @@ on:
 permissions:
   contents: read
 
-env:
+#env:
   #AZURE_WEBAPP_NAME: devopsoh05189poi  # set this to the name of your Azure Web App
-  RESOURCE_GROUP: Fenesys-Test
+  #RESOURCE_GROUP: Fenesys-Test
   #SLOT_NAME: staging
-  ACR_IMAGES: testfenesys.azurecr.io/devopsoh/api-poi
-  ACR_REGISTRY: TestFenesys
+  #ACR_IMAGES: testfenesys.azurecr.io/devopsoh/api-poi
+  #ACR_REGISTRY: TestFenesys
   #POI_STAGING_URL: https://devopsoh05189poi-staging.azurewebsites.net/api/version/poi
 
 jobs:
@@ -68,35 +68,35 @@ jobs:
         #cd cosmosdb-with-fastapi
         #uvicorn cosmosdb-with-fastapi.main:app --reload
     
-    - name: Get repo name
+    #- name: Get repo name
       # actions/github-script@v6 is breaking change which is node16
-      uses: actions/github-script@v5
-      id: resources_prefix
-      with:
-          result-encoding: string
-          script: return context.repo.repo.toLowerCase()
+      #uses: actions/github-script@v5
+      #id: resources_prefix
+      #with:
+          #result-encoding: string
+          #script: return context.repo.repo.toLowerCase()
     # Usage for current job: ${{ steps.resources_prefix.outputs.result }}
     
-    - name: Azure Login
-      uses: Azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    #- name: Azure Login
+      #uses: Azure/login@v1
+      #with:
+        #creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: ACR Build
-      uses: azure/CLI@v1
-      with:
+    #- name: ACR Build
+      #uses: azure/CLI@v1
+      #with:
         # azcliversion: 2.30.0
-        inlineScript: |
-          az extension add --name containerapp --upgrade
-          az acr login --name ${{ env.ACR_REGISTRY }}
-          az acr build \
-           --build-arg build_version=${{ github.run_id }} \
-           --registry ${{ env.ACR_REGISTRY }} \
-           --resource-group ${{ env.RESOURCE_GROUP }} \
-           --image ${{ env.ACR_IMAGES }}:{{ github.run_id }} .
+        #inlineScript: |
+          #az extension add --name containerapp --upgrade
+          #az acr login --name ${{ env.ACR_REGISTRY }}
+          #az acr build \
+           #--build-arg build_version=${{ github.run_id }} \
+           #--registry ${{ env.ACR_REGISTRY }} \
+           #--resource-group ${{ env.RESOURCE_GROUP }} \
+           #--image ${{ env.ACR_IMAGES }}:{{ github.run_id }} .
            
-    - name: ACR Image Checker
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          az acr repository list --name ${{ env.ACR_REGISTRY }}
+    #- name: ACR Image Checker
+      #uses: azure/CLI@v1
+      #with:
+        #inlineScript: |
+          #az acr repository list --name ${{ env.ACR_REGISTRY }}
