@@ -1,3 +1,4 @@
+[![Board Status](https://dev.azure.com/fareesdeveloper0547/c06f6e6e-55a0-41ed-a1b8-582f6b23e5c2/95741616-9ac2-48dc-ad76-2d9288932284/_apis/work/boardbadge/a85d4fb6-6b2f-46c4-967e-e2adddca8d1a)](https://dev.azure.com/fareesdeveloper0547/c06f6e6e-55a0-41ed-a1b8-582f6b23e5c2/_boards/board/t/95741616-9ac2-48dc-ad76-2d9288932284/Microsoft.RequirementCategory)
 # Simple Python web backend with Cosmos DB and Fast API
 
 This python project creates a very simple three-tiered ToDo web app backend using Cosmos DB as the database and FastAPI as the python web framework to expose API endpoints for performing CRUD operations.
