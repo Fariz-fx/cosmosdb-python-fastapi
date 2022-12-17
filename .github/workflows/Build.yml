@@ -88,6 +88,7 @@ jobs:
         # azcliversion: 2.30.0
         inlineScript: |
           az extension add --name containerapp --upgrade
+          az acr login --name ${{ env.ACR_REGISTRY }}
           az acr build \
            --build-arg build_version=${{ github.run_id }} \
            --registry ${{ env.ACR_REGISTRY }} \
