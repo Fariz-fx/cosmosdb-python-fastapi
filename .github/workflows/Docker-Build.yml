@@ -10,7 +10,7 @@ env:
 
 defaults:
   run:
-    working-directory: "cosmosdb-python-fastapi/cosmosdb-with-fastapi/"
+    working-directory: "cosmosdb-with-fastapi/*"
 
 jobs:
     Docker-build-:
@@ -32,7 +32,7 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker build . -t testfenesys.azurecr.io/fenesys:${{ github.sha }}
+            docker build . -f Dockerfile -t testfenesys.azurecr.io/fenesys:${{ github.sha }}
             docker push testfenesys.azurecr.io/fenesys:${{ github.sha }}
             
         #- name: 'Deploy to Azure Container Instances'
