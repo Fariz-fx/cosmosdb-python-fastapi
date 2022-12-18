@@ -8,10 +8,6 @@ on:
 env:
    RESOURCE_GROUP: Fenesys-Test
 
-defaults:
-  run:
-    working-directory: "cosmosdb-with-fastapi/*"
-
 jobs:
     Docker-build-:
         runs-on: ubuntu-latest
