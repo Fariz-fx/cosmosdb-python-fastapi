@@ -4,5 +4,5 @@ fastapi==0.88.0
 h11==0.14.0
 starlette==0.22.0
 uvicorn==0.20.0
-dotenv=0.21.0
+dotenv==0.21.0
 azure-cosmos=4.3.0
