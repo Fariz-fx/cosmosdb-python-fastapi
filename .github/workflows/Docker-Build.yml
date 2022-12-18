@@ -42,3 +42,11 @@ jobs:
             #registry-password: ${{ secrets.REGISTRY_PASSWORD }}
             #name: aci-sampleapp
             #location: 'west us'
+        - name: Build and deploy Container App
+          uses: azure/container-apps-deploy-action@v0
+          with:
+            appSourcePath: ${{ github.workspace }}
+            resourceGroup: Fenesys-Test
+            acrName: TestFenesys
+            containerAppName: fenesystest
+            imageToBuild: testfenesys.azurecr.io/fenesys:${{ github.sha }}
