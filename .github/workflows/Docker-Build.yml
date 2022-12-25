@@ -19,6 +19,9 @@ defaults:
 jobs:
     Docker-build-:
         runs-on: ubuntu-latest
+        env:
+            URI: ${{ secrets.URI }}
+            KEY: ${{ secrets.KEY }}
         steps: 
         
         #- name: Create .env file
@@ -57,14 +60,14 @@ jobs:
           run:
             ls  
             
-        - name: Create .env file
-          uses: SpicyPizza/create-envfile@v1.3.0
-          with:
-            envkey_URI: ${{ secrets.COSMOS_URI }}
-            envkey_KEY: ${{ secrets.COSMOS_KEY }}
-            file_name: .env
-            directory: api
-            fail_on_empty: true
+        #- name: Create .env file
+          #uses: SpicyPizza/create-envfile@v1.3.0
+          #with:
+            #envkey_URI: ${{ secrets.COSMOS_URI }}
+            #envkey_KEY: ${{ secrets.COSMOS_KEY }}
+            #file_name: .env
+            #directory: api
+            #fail_on_empty: true
             
           
         - name: 'Login via Azure CLI'
