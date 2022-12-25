@@ -22,7 +22,10 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      URI: ${{ secrets.URI }}
+      KEY: ${{ secrets.KEY }}
+      APPINSIGHTS_INSTRUMENTATIONKEY: ${{ secrets.APPINSIGHTS_INSTRUMENTATIONKEY }}
     steps:
       - name: Checkout to the branch
         uses: actions/checkout@v2
@@ -34,37 +37,31 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: fxteupaccd01cr.azurecr.io
-          username: ${{ secrets.FXTEUPACCD01CA_REGISTRY_USERNAME }}
-          password: ${{ secrets.FXTEUPACCD01CA_REGISTRY_PASSWORD }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
                 
-      - name: Create .env file
-        uses: SpicyPizza/create-envfile@v1.3.0
-        with:
-          envkey_URI: ${{ secrets.COSMOS_URI }}
-          envkey_KEY: ${{ secrets.COSMOS_KEY }}
-          file_name: .env
-          fail_on_empty: true
+      #- name: Create .env file
+        #uses: SpicyPizza/create-envfile@v1.3.0
+        #with:
+          #envkey_URI: ${{ secrets.URI }}
+          #envkey_KEY: ${{ secrets.KEY }}
+          #file_name: .env
+          #fail_on_empty: true
 
-      - name: Check the .env file
-        run: |
-          pwd
-          ls
+      #- name: Check the .env file
+        #run: |
+          #pwd
+          #ls
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: fxteupaccd01cr.azurecr.io/fx-t-eu-paccd-01-ca:${{ github.sha }}
+          tags: fxteupaccd01cr.azurecr.io/test:${{ github.sha }}
           file: ./api/Dockerfile
           context: ./api
-          
-      - name: List files
-        run: |
-          pwd
-          ls
          
-
-
+   
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -73,7 +70,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.FXTEUPACCD01CA_AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
 
       - name: Deploy to containerapp
@@ -81,5 +78,5 @@ jobs:
         with:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp registry set -n fx-t-eu-paccd-01-ca -g fx-t-eu-paccd-01-rg --server fxteupaccd01cr.azurecr.io --username  ${{ secrets.FXTEUPACCD01CA_REGISTRY_USERNAME }} --password ${{ secrets.FXTEUPACCD01CA_REGISTRY_PASSWORD }}
-            az containerapp update -n fx-t-eu-paccd-01-ca -g fx-t-eu-paccd-01-rg --image fxteupaccd01cr.azurecr.io/fx-t-eu-paccd-01-ca:${{ github.sha }}
+            az containerapp registry set -n fx-t-eu-paccd-02-ca -g fx-t-eu-paccd-02-rg --server fxteupaccd01cr.azurecr.io --username  ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+            az containerapp update -n fx-t-eu-paccd-01-ca -g fx-t-eu-paccd-01-rg --image fxteupaccd01cr.azurecr.io/test:${{ github.sha }}
