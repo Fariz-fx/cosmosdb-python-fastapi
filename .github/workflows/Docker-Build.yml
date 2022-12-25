@@ -1,52 +1,100 @@
 name: Docker Build Image
 
 on: 
-  push:
+  #push:
+    #branches: [ "main" ]
+  pull_request:
     branches: [ "main" ]
+  workflow_run:
+    workflows: ["Build Python application and Check Vulnerabilities"]
+    branches: [main]
+    types: 
+      - completed
   workflow_dispatch:
 
-env:
-   RESOURCE_GROUP: Fenesys-Test
+defaults:
+  run:
+    working-directory: api
 
 jobs:
     Docker-build-:
         runs-on: ubuntu-latest
-        steps:
+        steps: 
+        
+        #- name: Create .env file
+          #uses: SpicyPizza/create-envfile@v1.3.0
+          #with:
+            #envkey_URI: ${{ secrets.COSMOS_URI }}
+            #envkey_KEY: ${{ secrets.COSMOS_KEY }}
+            #file_name: .env
+            #directory: api
+            #fail_on_empty: true
+            
+        #- name: Create .env file
+          #run: |
+             #touch .env
+             #echo URI: ${{ secrets.COSMOS_URI }} >> .env
+             #echo KEY: ${{ secrets.COSMOS_KEY }} >> .env
+             #cat .env
+             
+        #- name: Check the location
+          #run:
+            #pwd
+                    
+        #- name: List the files
+          #run:
+            #ls   
+        
         # checkout the repo
         - name: 'Checkout GitHub Action'
           uses: actions/checkout@main
+          
+        - name: Check the location
+          run:
+            pwd
+                    
+        - name: List the files
+          run:
+            ls  
+            
+        - name: Create .env file
+          uses: SpicyPizza/create-envfile@v1.3.0
+          with:
+            envkey_URI: ${{ secrets.COSMOS_URI }}
+            envkey_KEY: ${{ secrets.COSMOS_KEY }}
+            file_name: .env
+            directory: api
+            fail_on_empty: true
+            
           
         - name: 'Login via Azure CLI'
           uses: azure/login@v1
           with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
+            
+        #- name: Create .env file
+          #run: |
+            #touch .env
+            #echo URI: ${{ secrets.COSMOS_URI }} >> .env
+            #echo KEY: ${{ secrets.COSMOS_KEY }} >> .env
+            #cat .env
         
-        - name: 'Build and push image'
+            
+        - name: Check the location
+          run:
+            pwd
+            
+        - name: List the files
+          run:
+            ls         
+        
+        - name: 'Build & Push image'
           uses: azure/docker-login@v1
           with:
-            login-server: testfenesys.azurecr.io
-            username: ${{ secrets.REGISTRY_USERNAME }}
-            password: ${{ secrets.REGISTRY_PASSWORD }}
+            login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+            username: ${{ secrets.ACR_USERNAME }}
+            password: ${{ secrets.ACR_PASSWORD }}
         - run: |
-            docker build . -f Dockerfile -t testfenesys.azurecr.io/fenesys:${{ github.sha }}
-            docker push testfenesys.azurecr.io/fenesys:${{ github.sha }}
-            
-        #- name: 'Deploy to Azure Container Instances'
-          #uses: 'azure/aci-deploy@v1'
-          #with:
-            #resource-group: ${{ env.RESOURCE_GROUP }}
-            #dns-name-label: ${{ env.RESOURCE_GROUP }}${{ github.run_id }}
-            #image: testfenesys.azurecr.io/fenesys::${{ github.sha }}
-            #registry-login-server: testfenesys.azurecr.io
-            #registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            #registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            #name: aci-sampleapp
-            #location: 'west us'
-        - name: Build and deploy Container App
-          uses: azure/container-apps-deploy-action@v0
-          with:
-            appSourcePath: ${{ github.workspace }}
-            resourceGroup: Fenesys-Test
-            acrName: TestFenesys
-            containerAppName: fenesystest
-            imageToBuild: testfenesys.azurecr.io/fenesys:${{ github.sha }}
+            docker build . -f Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/fenesys:${{ github.run_id }}
+            docker push ${{ secrets.ACR_LOGIN_SERVER }}/fenesys:${{ github.run_id }}
+    
