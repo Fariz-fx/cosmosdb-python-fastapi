@@ -95,8 +95,8 @@ jobs:
           uses: azure/docker-login@v1
           with:
             login-server: ${{ secrets.ACR_LOGIN_SERVER }}
-            username: ${{ secrets.ACR_USERNAME }}
-            password: ${{ secrets.ACR_PASSWORD }}
+            username: ${{ secrets.REGISTRY_USERNAMEE }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
             docker build . -f Dockerfile -t ${{ secrets.ACR_LOGIN_SERVER }}/fenesys:${{ github.run_id }}
             docker push ${{ secrets.ACR_LOGIN_SERVER }}/fenesys:${{ github.run_id }}
