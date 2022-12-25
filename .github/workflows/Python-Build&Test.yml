@@ -27,8 +27,8 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      COSMOS_URI: ${{ secrets.URI }}
-      COSMOS_KEY: ${{ secrets.KEY }}
+      URI: ${{ secrets.URI }}
+      KEY: ${{ secrets.KEY }}
     steps:
     # Performing Checkout
     - name: Git Checkout
